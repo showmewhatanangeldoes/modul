@@ -1,39 +1,31 @@
 using System;
-using System.Collections.Generic;
 
 class Product
 {
-    public string Name { get; set; }
-    public decimal Price { get; set; }
-    public string Category { get; set; }
-
+    public string PartA { get; set; }
+    public string PartB { get; set; }
+   
 }
 
 interface IBuilder
 {
-    void BuildProductName();
-    void BuildProductPrice();
-    void BuildProductCategory();
+    void BuildPartA();
+    void BuildPartB();
     Product GetProduct();
 }
 
-class OttoProductBuilder : IBuilder
+class ConcreteBuilder : IBuilder
 {
     private Product product = new Product();
 
-    public void BuildProductName()
+    public void BuildPartA()
     {
-        product.Name = "Product A";
+        product.PartA = "PartA";
     }
 
-    public void BuildProductPrice()
+    public void BuildPartB()
     {
-        product.Price = 100.00m;
-    }
-
-    public void BuildProductCategory()
-    {
-        product.Category = "Category X";
+        product.PartB = "PartB";
     }
 
     public Product GetProduct()
@@ -42,21 +34,19 @@ class OttoProductBuilder : IBuilder
     }
 }
 
-
-class ProductDirector
+class Director
 {
     private IBuilder builder;
 
-    public ProductDirector(IBuilder builder)
+    public Director(IBuilder builder)
     {
         this.builder = builder;
     }
 
-    public void ConstructProduct()
+    public void Construct()
     {
-        builder.BuildProductName();
-        builder.BuildProductPrice();
-        builder.BuildProductCategory();
+        builder.BuildPartA();
+        builder.BuildPartB();
     }
 }
 
@@ -64,15 +54,13 @@ class Program
 {
     static void Main(string[] args)
     {
-        IBuilder builder = new OttoProductBuilder();
-        ProductDirector director = new ProductDirector(builder);
+        IBuilder builder = new ConcreteBuilder();
+        Director director = new Director(builder);
 
-        director.ConstructProduct();
+        director.Construct();
 
         Product product = builder.GetProduct();
 
-        Console.WriteLine($"Product: {product.Name}, Price: {product.Price}, Category: {product.Category}");
+        Console.WriteLine("Product Parts: {0} and {1}", product.PartA, product.PartB);
     }
 }
-
-
